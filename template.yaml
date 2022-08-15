@@ -1,0 +1,55 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: First CloudFormation template
+
+
+Parameters:
+
+  RoleArn:
+    Type: String
+    Description: SageMaker IAM Role
+  
+  ImageURI:
+    Type: String
+    Description: The inference/container image that you are using
+
+  ModelData:
+    Type: String
+    Description: The S3 Path with the Model Data
+
+  InstanceType:
+    Type: String
+    Description: SageMaker Endpoint Instance Type
+  
+  InstanceCount:
+    Type: Integer
+    Description: Number of instances behind endpoint
+
+
+Resources:
+
+  SageMakerModel:
+    Type: AWS::SageMaker::Model
+    Properties: 
+      Containers: 
+        -
+          Image: !Ref ImageURI
+          ModelDataUrl: !Ref ModelData
+          Mode: SingleModel #This defaults to single model change to "MultiModel" for MME
+      ExecutionRoleArn: !Ref RoleArn
+
+  SageMakerEndpointConfig:
+    Type: "AWS::SageMaker::EndpointConfig"
+    Properties:
+      ProductionVariants: 
+        -
+          ModelName: !GetAtt SageMakerModel.ModelName
+          VariantName: sklearn-variant
+          InitialInstanceCount: !Ref InstanceCount
+          InstanceType: !Ref InstanceType
+          InitialVariantWeight: 1.0
+
+  SageMakerEndpoint:
+    Type: "AWS::SageMaker::Endpoint"
+    Properties: 
+      EndpointConfigName: !GetAtt SageMakerEndpointConfig.EndpointConfigName
+
