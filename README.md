@@ -8,3 +8,5 @@ python upload.py
 
 ./deploy.sh
 ```
+
+# [Corresponding Article](https://medium.com/@ram-vegiraju/deploying-sagemaker-endpoints-with-cloudformation-b43f7d495640)
