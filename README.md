@@ -1,5 +1,5 @@
 # cloudformation-sagemaker-ep
-Deploying SM Endpoints with CloudFormation
+Deploying SageMaker Endpoints with CloudFormation. Make sure to adjust the parameters in the CloudFormation template appropriately for your use-case.
 
 ```
 python local_model.py
